@@ -10,7 +10,7 @@ public class BaseRequest {
     public static Response sendRequest(String endpoint) {
         // Burada baseURL ve gerekli yapılamalar yapılabilir
         response = RestAssured.given()
-                .baseUri("http://api.example.com")
+                .baseUri("https://fakestoreapi.com")
                 .when()
                 .get(endpoint);  // GET isteği örneği
         return response;

@@ -7,7 +7,7 @@ public class SpecBuilder {
 
     public static RequestSpecification getRequestSpec() {
         return new RequestSpecBuilder()
-                .setBaseUri(ConfigurationReader.get("baseURL"))
+                .setBaseUri(ConfigurationReader.get("base_url"))
                 .setRelaxedHTTPSValidation()
                 .build();
     }

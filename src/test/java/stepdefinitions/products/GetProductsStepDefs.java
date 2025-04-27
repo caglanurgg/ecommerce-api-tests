@@ -13,7 +13,8 @@ public class GetProductsStepDefs {
 
     @Given("the API is available")
     public void the_api_is_available() {
-        baseURI = ConfigurationReader.get("baseURL");
+        baseURI = ConfigurationReader.get("base_url");
+        System.out.println(ConfigurationReader.get("base_url"));
     }
 
     @When("I send a GET request to {string}")
