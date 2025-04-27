@@ -12,5 +12,6 @@ import org.junit.runner.RunWith;
         dryRun = false,
         tags = "@getProducts"
 )
-public class Runner {
+public class CukesRunner {
 }
+
