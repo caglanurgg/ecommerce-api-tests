@@ -18,7 +18,7 @@ public class GetProductsStepDefs {
     @Given("the user sends a GET request to {string}")
     public void the_user_sends_a_get_request_to(String endpoint) {
         response = BaseRequest.sendRequest(endpoint);
-        response.prettyPrint();
+       // response.prettyPrint();
     }
 
     @Then("the HTTP status code should be {int}")
@@ -34,18 +34,6 @@ public class GetProductsStepDefs {
         Assert.assertTrue("Response body is not a JSON array!", responseBody.startsWith("[") && responseBody.endsWith("]"));
     }
 
-    @Then("each product object should have an {string}, {string}, {string}, and {string} field")
-    public void each_product_object_should_have_an_and_field(String field1, String field2, String field3, String field4) {
-        List<Product> products = response.jsonPath().getList("products", Product.class);
-
-        for (Product product : products) {
-            Assert.assertNotNull(field1 + " is missing!", getFieldValue(field1, product));
-            Assert.assertNotNull(field2 + " is missing!", getFieldValue(field2, product));
-            Assert.assertNotNull(field3 + " is missing!", getFieldValue(field3, product));
-            Assert.assertNotNull(field4 + " is missing!", getFieldValue(field4, product));
-        }
-    }
-
     private Object getFieldValue(String field, Product product) {
         switch (field) {
             case "id":
@@ -56,8 +44,30 @@ public class GetProductsStepDefs {
                 return product.getPrice();
             case "category":
                 return product.getCategory();
+            case "description":
+                return product.getDescription();
+            case "image":
+                return product.getImage();
+            case "rating":
+                return product.getRating();
             default:
                 throw new IllegalArgumentException("Unknown field: " + field);
+        }
+    }
+
+    @Then("each product object should have an {string}, {string}, {string}, {string}, {string}, {string}, and {string} field")
+    public void each_product_object_should_have_an_and_field(String field1, String field2, String field3, String field4, String field5, String field6, String field7) {
+        List<Product> products = response.jsonPath().getList(".", Product.class);
+
+        for (Product product : products) {
+            // Test edilen alanları burada sabit tutuyoruz.
+            Assert.assertNotNull(field1 + " is missing!", getFieldValue(field1, product));
+            Assert.assertNotNull(field2 + " is missing!", getFieldValue(field2, product));
+            Assert.assertNotNull(field3 + " is missing!", getFieldValue(field3, product));
+            Assert.assertNotNull(field4 + " is missing!", getFieldValue(field4, product));
+            Assert.assertNotNull(field5 + " is missing!", getFieldValue(field5, product));
+            Assert.assertNotNull(field6 + " is missing!", getFieldValue(field6, product));
+            Assert.assertNotNull(field7 + " is missing!", getFieldValue(field7, product));
         }
     }
 }

@@ -5,4 +5,6 @@ Feature: Get all products
     Given the user sends a GET request to "/products"
     Then the HTTP status code should be 200
     And the response body should be in JSON array format
-    And each product object should have an "id", "title", "price", and "category" field
+    Then each product object should have an "id", "title", "price", "category", "description", "image", and "rating" field
+
+
