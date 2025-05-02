@@ -1,6 +1,5 @@
 package utilities;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -11,11 +10,12 @@ public class ConfigurationReader {
 
     static {
         try {
-            FileInputStream file = new FileInputStream("src/test/resources/configuration.properties");
             properties = new Properties();
-            properties.load(file);
+            properties.load(ConfigurationReader.class.getClassLoader().getResourceAsStream("config/configuration.properties"));
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (NullPointerException e) {
+            System.err.println("configuration.properties file not found. Check the path.");
         }
     }
 

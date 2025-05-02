@@ -2,17 +2,20 @@ package base;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import utilities.SpecBuilder;
 
 public class BaseRequest {
 
     public static Response response;
 
+    // Response'u döndüren metod
     public static Response sendRequest(String endpoint) {
-        // Burada baseURL ve gerekli yapılamalar yapılabilir
         response = RestAssured.given()
-                .baseUri("https://fakestoreapi.com")
+                .spec(SpecBuilder.getRequestSpec())  // SpecBuilder'dan base URL ve diğer ayarları alıyoruz
                 .when()
-                .get(endpoint);  // GET isteği örneği
-        return response;
+                .get(endpoint);
+
+        return response;  // response'u döndürüyoruz
     }
 }
+
