@@ -17,5 +17,4 @@ public class ApiUtils {
 
         return product;
     }
-
 }

@@ -21,16 +21,18 @@ public class BaseRequest {
     }
 
     public static Response sendPostRequest(String endpoint, String requestBody) {
-        response = RestAssured.given()
+        Response tempResponse = RestAssured.given()
                 .spec(SpecBuilder.getRequestSpec())
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
                 .body(requestBody)
                 .post(endpoint);
 
-        if (response == null) {
-            throw new RuntimeException("API response is NULL! Check API accessibility.");
-        }
+        assertNotNull("API response is NULL! Check API accessibility.", tempResponse);
 
-        System.out.println("Response received: " + response.prettyPrint());
+        response = tempResponse;
+        System.out.println("Response received:");
+        response.prettyPrint();
         return response;
     }
 }

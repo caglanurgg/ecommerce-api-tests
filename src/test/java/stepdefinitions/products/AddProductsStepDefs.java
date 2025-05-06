@@ -5,9 +5,9 @@ import io.cucumber.java.en.*;
 import io.restassured.response.Response;
 import org.json.JSONObject;
 import utilities.ApiUtils;
+import utilities.ScenarioContext;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class AddProductsStepDefs {
 
@@ -44,5 +44,42 @@ public class AddProductsStepDefs {
         assertTrue(responseBody.contains("\"category\":"));
         assertTrue(responseBody.contains("\"image\":"));
         assertTrue(responseBody.contains("\"id\":"));
+    }
+
+    @Then("the API should respond within {int} milliseconds")
+    public void the_api_should_respond_within_milliseconds(int expectedTime) {
+        long responseTime = response.getTime();
+        System.out.println("Response Time: " + responseTime + "ms");
+
+        assertTrue("Response took too long!", responseTime <= expectedTime);
+    }
+
+    @And("the user sends the same POST request again")
+    public void theUserSendsSamePostRequestAgain() {
+        Response secondResponse = BaseRequest.sendPostRequest("/products", requestBody.toString());
+
+        // İlk yanıtla ikinciyi kıyaslayabilmek için sakla
+        ScenarioContext.set("secondResponse", secondResponse);
+    }
+
+    @Then("the API should return the exact same response for both requests")
+    public void the_api_should_return_the_same_response() {
+        Response secondResponse = (Response) ScenarioContext.get("secondResponse");
+
+        assertEquals("API returns inconsistent response!",
+                response.getBody().asString(),
+                secondResponse.getBody().asString());
+    }
+
+    @And("log a warning if the ID remains unchanged")
+    public void log_a_warning_if_the_id_remains_unchanged() {
+        Response secondResponse = (Response) ScenarioContext.get("secondResponse");
+
+        int firstId = response.getBody().jsonPath().getInt("id");
+        int secondId = secondResponse.getBody().jsonPath().getInt("id");
+
+        if (firstId == secondId) {
+            System.err.println("Warning: API is returning the same ID for duplicate POST requests!");
+        }
     }
 }
